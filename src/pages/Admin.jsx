@@ -16,15 +16,12 @@ const Admin = () => {
     const handleRemove = async (userId) => {
 
         try {
-            const response = await axiosInstance.delete(
-                `https://travelbackend-4ufh.onrender.com/delete/${userId}`
-            );
-
+         const response =   await axiosInstance.delete(`/delete/${userId}`);
             console.log("User Deleted:", response.data);
 
             toast.success("User removed successfully", { position: "bottom-right" });
-            fetchData();            // refresh data after deletion
-            setShowPopup(false);    // close confirmation popup
+            fetchData();
+            setShowPopup(false);
         } catch (error) {
             console.error("Delete error:", error);
 
@@ -39,12 +36,12 @@ const Admin = () => {
     };
 
     const fetchData = async () => {
-     try {
-  const response = await axios.get('https://travelbackend-4ufh.onrender.com/getData');
-  setData(response.data.data || response.data);  // depending on backend response shape
-} catch (error) {
-  console.error("Error fetching data:", error);
-}
+        try {
+            const response = await axios.get('https://travelbackend-4ufh.onrender.com/getData');
+            setData(response.data.data || response.data);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
     };
 
     useEffect(() => {

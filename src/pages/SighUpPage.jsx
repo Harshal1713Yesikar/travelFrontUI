@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import useScrollAnimation from "../useScrollAnimation";
 import axios from "axios";
+import axiosInstance from "../api/axiosInstance";
 
 const debounce = (func, wait) => {
   let timeout;
@@ -39,15 +40,8 @@ const SignupPage = () => {
     console.log("Form submitted with:", data);
 
    try {
-      const response = await axios.post(
-        "https://travelbackend-4ufh.onrender.com/register",
-        data,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+   const response = await axiosInstance.post('/register', data);
+
 
       console.log("API Response:", response.data);
 

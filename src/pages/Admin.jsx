@@ -2,6 +2,8 @@ import { UserX2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import useScrollAnimation from "../useScrollAnimation";
 import toast from "react-hot-toast";
+import axios from "axios";
+import axiosInstance from "../api/axiosInstance";
 const Admin = () => {
 
 
@@ -14,36 +16,35 @@ const Admin = () => {
     const handleRemove = async (userId) => {
 
         try {
+            const response = await axiosInstance.delete(
+                `https://travelbackend-4ufh.onrender.com/delete/${userId}`
+            );
 
-            const res = await fetch(`http://localhost:3001/delete/${userId}`, { method: "DELETE" });
+            console.log("User Deleted:", response.data);
 
-            const result = await res.json()
-            console.log("user Deleted", result)
-
-            if (res.ok) {
-                toast.success("User removed successfully", { position: "bottom-right" });
-                fetchData();
-                setShowPopup(false);
-            }
-            else {
-                toast.error(result.msg || "Failed to delete user", { position: "bottom-right" });
-            }
+            toast.success("User removed successfully", { position: "bottom-right" });
+            fetchData();            // refresh data after deletion
+            setShowPopup(false);    // close confirmation popup
         } catch (error) {
-
             console.error("Delete error:", error);
-            toast.error("Something went wrong!");
 
+            const errorMessage =
+                error.response?.data?.msg ||
+                error.response?.data?.error ||
+                error.message ||
+                "Something went wrong!";
+
+            toast.error(errorMessage, { position: "bottom-right" });
         }
     };
 
     const fetchData = async () => {
-        try {
-            const res = await fetch("http://localhost:3001/getData");
-            const result = await res.json();
-            setData(result.data || result);
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
+     try {
+  const response = await axios.get('https://travelbackend-4ufh.onrender.com/getData');
+  setData(response.data.data || response.data);  // depending on backend response shape
+} catch (error) {
+  console.error("Error fetching data:", error);
+}
     };
 
     useEffect(() => {

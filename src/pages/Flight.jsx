@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { Plane, MapPin, Calendar, Users, ArrowLeftRight, Phone, MessageCircle, Mail } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Link } from "react-router-dom";
+import axios from 'axios';
 
 const FlightSearch = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -108,52 +109,52 @@ const FlightSearch = () => {
       return;
     }
 
-    try {
-      const response = await fetch('http://localhost:3001/flight', {
-        method: 'POST',
+   try {
+    const response = await axios.post(
+      'https://travelbackend-4ufh.onrender.com/flight',
+      {
+        city: formData.departureCity,
+        arrivalCity: formData.arrivalCity,
+        date: formData.departureDate,
+        number: formData.passengers.toString(),
+        tripType: tripType,
+        returnDate: formData.returnDate,
+      },
+      {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          city: formData.departureCity,
-          arrivalCity: formData.arrivalCity,
-          date: formData.departureDate,
-          number: formData.passengers.toString(),
-          tripType: tripType,
-          returnDate: formData.returnDate,
-        }),
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        toast.success('Flight search completed successfully!', {
-          position: 'top-right',
-          duration: 4000,
-        });
-
-        setFormData({
-          departureCity: '',
-          arrivalCity: '',
-          departureDate: '',
-          passengers: 1,
-          tripType: 'one-way',
-          returnDate: '',
-        });
-        setTripType('one-way');
-      } else {
-        throw new Error(result.message || 'Flight search failed');
       }
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Something went wrong!';
-      toast.error(errorMessage, {
-        position: 'top-right',
-        duration: 4000,
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    );
+
+    console.log("API Response:", response.data);
+
+    toast.success('✈️ Flight search completed successfully!', {
+      position: 'top-right',
+      autoClose: 4000,
+    });
+
+    setFormData({
+      departureCity: '',
+      arrivalCity: '',
+      departureDate: '',
+      passengers: 1,
+      tripType: 'one-way',
+      returnDate: '',
+    });
+    setTripType('one-way');
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message || error.message || 'Something went wrong!';
+    console.error("Flight search error:", errorMessage);
+
+    toast.error(errorMessage, {
+      position: 'top-right',
+      autoClose: 4000,
+    });
+  } finally {
+    setIsLoading(false);
+  }
   };
 
   return (

@@ -37,8 +37,9 @@ const Admin = () => {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get('https://travelbackend-4ufh.onrender.com/getData');
-            setData(response.data.data || response.data);
+            const res = await fetch("http://localhost:3001/getData");
+            const result = await res.json();
+            setData(result.data || result);
         } catch (error) {
             console.error("Error fetching data:", error);
         }

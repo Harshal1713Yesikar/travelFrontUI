@@ -13,7 +13,6 @@ const Contact = () => {
     email: "",
     message: "",
   });
-
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
@@ -22,8 +21,6 @@ const Contact = () => {
     e.preventDefault();
     try {
       const response = await axiosInstance.post('/contactUs', data);
-
-
       console.log("API Response:", response.data);
 
       setData({ name: "", email: "", message: "" });
@@ -39,8 +36,6 @@ const Contact = () => {
       });
     }
   };
-
-
   return (
 
     <>
@@ -226,7 +221,6 @@ const Contact = () => {
             </div>
           </div>
         </div>
-
         <div className="mt-16 flex justify-center border-t pt-6">
           <p className="text-slate-600 font-serif font-bold">
             All rights reserved @jadoo.com
@@ -239,5 +233,4 @@ const Contact = () => {
 
   );
 };
-
 export default Contact;

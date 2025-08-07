@@ -7,7 +7,7 @@ import axiosInstance from "../api/axiosInstance";
 
 const debounce = (func, wait) => {
   let timeout;
-  
+
   return (...args) => {
     clearTimeout(timeout);
     timeout = setTimeout(() => func(...args), wait);
@@ -39,13 +39,13 @@ const SignupPage = () => {
     setIsAdding(true);
     console.log("Form submitted with:", data);
 
-   try {
-   const response = await axiosInstance.post('/register', data);
+    try {
+      const response = await axiosInstance.post('/register', data);
 
 
       console.log("API Response:", response.data);
 
-   
+
       setData({ name: "", username: "", email: "", password: "" });
 
       toast.success("User registered successfully! ✅", {
